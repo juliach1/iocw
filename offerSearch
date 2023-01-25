@@ -1,0 +1,29 @@
+*kod*
+
+@GetMapping("/szukaj/przetworz")
+    public String searchOffer(Model model,
+                              @Valid @ModelAttribute("offerSearchModel") OfferSearchModel offerSearchModel,
+                              @RequestParam(value = "fraza", required = false) String phrase,
+                              @RequestParam(value = "typyOfert", required = false) List<String> offerTypes,
+                              @RequestParam(value = "kategoria", required = false) Integer searchCategory,
+                              @RequestParam(value = "typSortowania", required = false) String sortType,
+                              @RequestParam(value = "cenaMin", required = false) Double minPrice,
+                              @RequestParam(value = "cenaMax", required = false) Double maxPrice,
+                              @RequestParam(value = "szukacWOpisie", required = false) String searchInDesc){
+
+        offerSearchModel.setMinSmallerThanMax(offerSearchModel.isMinSmallerThanMax());
+
+        OfferSearchDTO offerSearchDTO = new OfferSearchDTO(offerTypeService,categoryService);
+
+        List<OfferDTO> offers = offerService.findByOfferSearchModel(offerSearchModel);
+
+        model.addAttribute("offers", offers);
+        model.addAttribute("offerSearchModel", offerSearchModel);
+        model.addAttribute("pageSize", PAGE_SIZE);
+        model.addAttribute("offerSearchDTO", offerSearchDTO);
+
+        return "/user/main/search-offer";
+    }
+
+
+*kod*
